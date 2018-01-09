@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 // import winston from 'winston';
 import db from '../models/';
 
 dotenv.config();
-const key = process.env.secretKey;
+
 const { User } = db;
 
 export const checkUserInput = (req, res, next) => {
@@ -125,32 +125,50 @@ export const validateLogin = (req, res, next) => {
     }));
 };
 
-export const isLoggedIn = (req, res, next) => {
-  let token;
-  const tokenAvailable = req.headers.authorization ||
-  req.headers['x-access-token'];
-  if (req.headers.authorization) {
-    token = req.headers.authorization.split(' ')[1];
-  } else {
-    token = tokenAvailable;
+export const validateEdituser = (req, res, next) => {
+  const userNameError = 'Please provide a username with atleast 5 characters.';
+  req.checkBody({
+    fullname: {
+      notEmpty: true,
+      isLength: {
+        options: [{ min: 5 }],
+        errorMessage: userNameError
+      },
+      errorMessage: 'Your fullname is required'
+    },
+  });
+  const errors = req.validationErrors();
+  if (errors) {
+    const allErrors = [];
+    errors.forEach((error) => {
+      allErrors.push({
+        error: error.msg
+      });
+    });
+    return res.status(409)
+      .json(allErrors);
   }
-  if (token) {
-    jwt.verify(token, key, (error, decoded) => {
-      if (error) {
-        res.status(401)
-          .send({
-            message: 'Failed to Authenticate Token',
-            error
-          });
+  const { id } = req.decoded.currentUser;
+  User.findOne({
+    where: {
+      id
+    }
+  })
+    .then((user) => {
+      if (user.fullname === req.body.fullname) {
+        res.status(403).send({
+          message: 'fullname already exist'
+        });
+      } else if (req.body.password) {
+        res.status(403).send({
+          mesage: 'you cannot edit your password'
+        });
       } else {
-        req.decoded = decoded;
         next();
       }
+    })
+    .catch(() => {
+      res.status(500).send('Internal server Error');
     });
-  } else {
-    return res.status(401)
-      .json({
-        message: 'Access denied, Authentication token does not exist'
-      });
-  }
 };
+
