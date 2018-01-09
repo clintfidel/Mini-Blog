@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import winston from 'winston';
 import validator from 'express-validator';
 // import BlogRoutes from './server/routes/recipe'
-// import UserRoutes from './server/routes/user'
+ import UserRoutes from './server/routes/user'
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 
-// app.use('/api/v1/users', UserRoutes)
+ app.use('/api/v1/users', UserRoutes)
 // app.use('/api/v1/recipes', BlogRoutes)
 
 app.get('*', (req, res) => {
