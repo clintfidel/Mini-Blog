@@ -16,6 +16,7 @@ export default {
             activeUser.dataValues,
             ['password', 'createdAt', 'updatedAt']
           );
+
           const expiresIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
           const token = jwt.sign(
             { currentUser, expiresIn },
@@ -64,5 +65,61 @@ export default {
               });
           });
       });
+  },
+
+  editProfile(req, res) {
+    const { id } = req.decoded.currentUser;
+    User
+      .findOne({
+        where: { id }
+      })
+      .then((edit) => {
+        edit
+          .update(req.body)
+          .then((result) => {
+            const currentUser = omit(
+              result.dataValues,
+              ['password', 'createdAt', 'updatedAt']
+            );
+            const token = jwt.sign(
+              {
+                currentUser,
+                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+              },
+              process.env.secretKey
+            );
+            res.status(200).json({
+              message: 'profile edited successfully!!!',
+              token,
+              data: {
+                fullname: result.fullname,
+                username: result.username,
+                email: result.email
+              }
+            });
+          })
+          .catch(() => res.status(500).json({
+            message: 'internal server error'
+          }));
+      });
+  },
+
+  getAllUsers(req, res) {
+    User.findAll({})
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({
+            message: 'no user found'
+          });
+        }
+        return res.status(200).send(user);
+      })
+      .catch((err) => {
+        console.log(err, '====>');
+        return res.status(500).json({
+          message: 'Internal server Error!'
+        });
+      });
   }
 };
+
