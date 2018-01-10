@@ -6,7 +6,8 @@ import db from '../models/';
 
 dotenv.config();
 
-const { User } = db;
+const { User, Blog } = db;
+
 
 export const checkUserInput = (req, res, next) => {
   const userNameError = 'Please provide a username with atleast 5 characters.';
@@ -58,6 +59,44 @@ export const checkUserInput = (req, res, next) => {
     email: req.body.email,
     isAdmin: req.body.isAdmin,
     password
+  };
+  next();
+};
+
+export const checkArticleInput = (req, res, next) => {
+  const lengthError = 'Please provide a title with atleast 5 characters.';
+  req.checkBody({
+    blogTitle: {
+      notEmpty: true,
+      isLength: {
+        options: [{ min: 5 }],
+        errorMessage: lengthError
+      },
+      errorMessage: 'Your Blog title is required'
+    },
+    blogPost: {
+      notEmpty: true,
+      errorMessage: 'Please add the content of your blog'
+    }
+  });
+  const errors = req.validationErrors();
+  if (errors) {
+    const allErrors = [];
+    errors.forEach((error) => {
+      allErrors.push({
+        error: error.msg
+      });
+    });
+    return res.status(409)
+      .json(allErrors);
+  }
+  req.blogInput = {
+    blogTitle: req.body.blogTitle,
+    instructions: req.body.instructions,
+    blogPost: req.body.blogPost,
+    views: req.body.views,
+    rate: req.body.rate,
+    userId: req.decoded.currentUser.id
   };
   next();
 };
@@ -172,3 +211,37 @@ export const validateEdituser = (req, res, next) => {
     });
 };
 
+export const verifyUserIdExist = (req, res, next) => {
+  User
+    .findOne({
+      where: {
+        id: req.decoded.currentUser.id
+      }
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'your userId doesnt exist in the database'
+        });
+      }
+      next();
+    })
+    .catch(error => res.status(404).send(error.errors));
+};
+
+export const blogTitleExist = (req, res, next) => {
+  Blog
+    .findOne({
+      where: {
+        blogTitle: req.body.blogTitle
+      }
+    })
+    .then((blog) => {
+      if (blog) {
+        return res.status(409).json({
+          error: 'Blog Title already exist'
+        });
+      }
+      next();
+    });
+};
