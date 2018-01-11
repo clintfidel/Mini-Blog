@@ -5,22 +5,25 @@ import { checkUserInput, isSignedUpWithEmail,
   isSignedUpWithUsername, validateEdituser,
   validateLogin } from '../middlewares/Validation';
 
+const {
+  signUp, login, editProfile, getAllUsers
+} = user;
 const app = express.Router();
 
 app.route('/signup')
   .post(
     checkUserInput, isSignedUpWithEmail,
-    isSignedUpWithUsername, user.signUp
+    isSignedUpWithUsername, signUp
   );
 
 app.route('/signIn')
-  .post(isLoggedIn, validateLogin, user.login);
+  .post(isLoggedIn, validateLogin, login);
 
 
 app.route('/editprofile')
-  .put(isLoggedIn, isSignedUpWithEmail, validateEdituser, user.editProfile);
+  .put(isLoggedIn, isSignedUpWithEmail, validateEdituser, editProfile);
 
 app.route('/')
-  .get(isLoggedIn, isAdmin, user.getAllUsers);
+  .get(isLoggedIn, isAdmin, getAllUsers);
 export default app;
 
