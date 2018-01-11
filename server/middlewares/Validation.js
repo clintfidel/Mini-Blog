@@ -217,9 +217,11 @@ export const validateEditUserId = (req, res, next) => {
     .findById(id)
     .then(() => {
       if (req.body.userId) {
-        res.status(403).send({
+        return res.status(403).send({
           mesage: 'you cannot edit your userId'
         });
+      } else if (req.body.userId === 'undefined') {
+        next();
       }
       next();
     })
