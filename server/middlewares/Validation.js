@@ -212,16 +212,35 @@ export const validateEdituser = (req, res, next) => {
 };
 
 export const verifyUserIdExist = (req, res, next) => {
+  const { id } = req.decoded.currentUser;
   User
     .findOne({
       where: {
-        id: req.decoded.currentUser.id
+        id
       }
     })
     .then((user) => {
       if (!user) {
         return res.status(404).send({
-          message: 'your userId doesnt exist in the database'
+          message: 'No user with that Id found!'
+        });
+      }
+      next();
+    })
+    .catch(error => res.status(404).send(error.errors));
+};
+
+export const verifyBlogIdExist = (req, res, next) => {
+  Blog
+    .findOne({
+      where: {
+        id: req.params.blogId
+      }
+    })
+    .then((blog) => {
+      if (!blog) {
+        return res.status(404).send({
+          message: 'No Blog with that Id found'
         });
       }
       next();
@@ -239,7 +258,7 @@ export const blogTitleExist = (req, res, next) => {
     .then((blog) => {
       if (blog) {
         return res.status(409).json({
-          error: 'Blog Title already exist'
+          error: 'Blog already exist'
         });
       }
       next();

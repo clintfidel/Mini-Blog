@@ -36,8 +36,8 @@ export const isLoggedIn = (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
   const decodeToken = req.decoded;
-  console.log(decodeToken);
-  if (decodeToken.currentUser.isAdmin === 0 || typeof decodeToken.currentUser.isAdmin === 'undefined') {
+  if (decodeToken.currentUser.isAdmin === 0 ||
+typeof decodeToken.currentUser.isAdmin === 'undefined') {
     return res.status(403).send({
       message: 'you do not have permission to perform this operation'
     });
