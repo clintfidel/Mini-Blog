@@ -60,6 +60,47 @@ const BlogController = {
       });
   },
 
+  editArticle(req, res) {
+    const { id } = req.decoded.currentUser;
+    Blog
+      .findById(+req.params.blogId)
+      .then((currentBlog) => {
+        if (currentBlog.userId !== parseInt(id, 10)) {
+          return res.status(403).send({
+            message: 'sorry! you can only edit your own recipe'
+          });
+        }
+        return Blog
+          .update(req.body, {
+            where: {
+              id: +req.params.blogId,
+              userId: id
+            }
+          })
+          .then((edit) => {
+            if (!edit) {
+              res.status(404).send({
+                message: 'No Blog found for edit'
+              });
+            }
+
+            return res.status(200).json({
+              message: 'Blog sucessfully updated',
+              data: {
+                blogTitle: req.body.blogTitle,
+                blogPost: req.body.blogPost,
+                rate: req.body.rate,
+                blogId: req.params.blogId,
+                userId: id
+              }
+            });
+          });
+      })
+      .catch(() => {
+        res.status(500).send('Internal sever Error');
+      });
+  },
+
 };
 
 export default BlogController;
