@@ -211,6 +211,21 @@ export const validateEdituser = (req, res, next) => {
     });
 };
 
+export const validateEditUserId = (req, res, next) => {
+  const { id } = req.decoded.currentUser;
+  Blog
+    .findById(id)
+    .then(() => {
+      if (req.body.userId) {
+        res.status(403).send({
+          mesage: 'you cannot edit your userId'
+        });
+      }
+      next();
+    })
+    .catch(() => res.status(500).send('Internal server Error'));
+};
+
 export const verifyUserIdExist = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   User
