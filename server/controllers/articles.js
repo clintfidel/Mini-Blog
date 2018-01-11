@@ -101,6 +101,19 @@ const BlogController = {
       });
   },
 
+  getAllArticles(req, res) {
+    Blog
+      .findAll({})
+      .then((articles) => {
+        if (!articles) {
+          res.status(404).json({
+            message: 'No article found!'
+          });
+        }
+        res.status(200).json(articles);
+      })
+      .catch(() => res.status(500).send('Internal server Error'));
+  }
 };
 
 export default BlogController;
