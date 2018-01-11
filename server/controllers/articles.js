@@ -5,7 +5,7 @@ import db from '../models';
 
 dotenv.load();
 
-const { Blog } = db;
+const { Blog, Review } = db;
 
 const BlogController = {
   create(req, res) {
@@ -101,7 +101,36 @@ const BlogController = {
         res.status(200).json(articles);
       })
       .catch(() => res.status(500).send('Internal server Error'));
+  },
+
+  reviewArticles(req, res) {
+    const { id } = req.decoded.currentUser;
+    Review
+      .findOne({
+        where: {
+          userId: id,
+          blogId: req.params.blogId
+        }
+      })
+      .then(() => {
+        Review
+          .create(req.reviewInput)
+          .then((review) => {
+            res.status(201).json({
+              message: 'you have successfully reviewed this article',
+              reviewData: {
+                user: id,
+                blogId: review.blogId,
+                content: review.comments
+              }
+            });
+          });
+      })
+      .catch(() => {
+        res.status(500).send('Internal server Error');
+      });
   }
+
 };
 
 export default BlogController;
