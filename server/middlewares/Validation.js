@@ -218,7 +218,7 @@ export const validateEditUserId = (req, res, next) => {
     .then(() => {
       if (req.body.userId) {
         return res.status(403).send({
-          mesage: 'you cannot edit your userId'
+          mesage: 'you cannot edit userId'
         });
       } else if (req.body.userId === 'undefined') {
         next();
@@ -263,6 +263,17 @@ export const verifyBlogIdExist = (req, res, next) => {
       next();
     })
     .catch(error => res.status(404).send(error.errors));
+};
+
+export const verifyBlogIdParams = (req, res, next) => {
+  if (req.params.blogId.test(/^[0-9]/) === null
+  || req.params.blogId === 'undefined') {
+    return res.status(400).json({
+      status: false,
+      message: 'Unidentified Blog! pls include a valid blogId'
+    });
+  }
+  next();
 };
 
 export const blogTitleExist = (req, res, next) => {
