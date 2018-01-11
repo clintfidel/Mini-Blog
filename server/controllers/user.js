@@ -7,7 +7,7 @@ dotenv.load();
 const secret = process.env.secretkey;
 
 const { User } = db;
-export default {
+const UserController = {
   signUp(req, res) {
     return User.create(req.userInput)
       .then((activeUser) => {
@@ -16,6 +16,7 @@ export default {
             activeUser.dataValues,
             ['password', 'createdAt', 'updatedAt']
           );
+          console.log(currentUser);
           const expiresIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
           const token = jwt.sign(
             { currentUser, expiresIn },
@@ -120,3 +121,4 @@ export default {
   }
 };
 
+export default UserController;
