@@ -4,10 +4,10 @@ import { isLoggedIn, isAdmin } from '../middlewares/Authorization';
 import { checkArticleInput,
   verifyUserIdExist, verifyBlogIdExist,
   blogTitleExist,
-  checkInvalidUser, } from '../middlewares/Validation';
+  checkInvalidUser, checkReviewsInput, reviewExist } from '../middlewares/Validation';
 
 const {
-  create, deleteArticle, editArticle, getAllArticles
+  create, deleteArticle, editArticle, getAllArticles, reviewArticles
 } = articles;
 
 const app = express.Router();
@@ -40,4 +40,9 @@ app.route('/admin/edit/:blogId')
     blogTitleExist, editArticle
   );
 
+app.route('/review/:blogId')
+  .post(
+    isLoggedIn, verifyBlogIdExist, verifyUserIdExist, reviewExist,
+    checkReviewsInput, reviewArticles
+  );
 export default app;
