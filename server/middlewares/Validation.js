@@ -6,7 +6,7 @@ import db from '../models/';
 
 dotenv.config();
 
-const { User, Blog } = db;
+const { User, Blog, Review } = db;
 
 
 export const checkUserInput = (req, res, next) => {
@@ -97,6 +97,37 @@ export const checkArticleInput = (req, res, next) => {
     views: req.body.views,
     rate: req.body.rate,
     userId: req.decoded.currentUser.id
+  };
+  next();
+};
+
+export const checkReviewsInput = (req, res, next) => {
+  const lengthError = 'Please add words of at least 5 characters long.';
+  req.checkBody({
+    comments: {
+      notEmpty: true,
+      isLength: {
+        options: [{ min: 5 }],
+        errorMessage: lengthError
+      },
+      errorMessage: 'Your comment is required'
+    },
+  });
+  const errors = req.validationErrors();
+  if (errors) {
+    const allErrors = [];
+    errors.forEach((error) => {
+      allErrors.push({
+        error: error.msg
+      });
+    });
+    return res.status(409)
+      .json(allErrors);
+  }
+  req.reviewInput = {
+    userId: req.decoded.currentUser.id,
+    comments: req.body.comments,
+    blogId: req.params.blogId
   };
   next();
 };
@@ -242,7 +273,6 @@ export const checkInvalidUser = (req, res, next) => {
     });
 };
 
-
 export const verifyUserIdExist = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   User
@@ -303,4 +333,26 @@ export const blogTitleExist = (req, res, next) => {
       }
       next();
     });
+};
+
+export const reviewExist = (req, res, next) => {
+  const { id } = req.decoded.currentUser;
+  Review
+    .findOne({
+      where: {
+        $and: {
+          blogId: req.params.blogId,
+          userId: id
+        }
+      }
+    })
+    .then((review) => {
+      if (review) {
+        return res.status(403).send({
+          message: 'you cannot perform this operation more than once'
+        });
+      }
+      next();
+    })
+    .catch(() => res.status(500).send('Internal server Error'));
 };
