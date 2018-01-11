@@ -228,6 +228,21 @@ export const validateEditUserId = (req, res, next) => {
     .catch(() => res.status(500).send('Internal server Error'));
 };
 
+export const checkInvalidUser = (req, res, next) => {
+  const { id } = req.decoded.currentUser;
+  Blog
+    .findById(req.params.blogId)
+    .then((currentBlog) => {
+      if (currentBlog.userId !== parseInt(id, 10)) {
+        return res.status(403).send({
+          message: 'Invalid User! you can only make changes to your own Blog'
+        });
+      }
+      next();
+    });
+};
+
+
 export const verifyUserIdExist = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   User
@@ -248,6 +263,13 @@ export const verifyUserIdExist = (req, res, next) => {
 };
 
 export const verifyBlogIdExist = (req, res, next) => {
+  if (req.params.blogId.match(/^[0-9]/) === null
+  || !req.params.blogId) {
+    return res.status(400).json({
+      status: false,
+      message: 'Unidentified Blog! pls include a valid blogId'
+    });
+  }
   Blog
     .findOne({
       where: {
@@ -265,16 +287,6 @@ export const verifyBlogIdExist = (req, res, next) => {
     .catch(error => res.status(404).send(error.errors));
 };
 
-export const verifyBlogIdParams = (req, res, next) => {
-  if (req.params.blogId.test(/^[0-9]/) === null
-  || req.params.blogId === 'undefined') {
-    return res.status(400).json({
-      status: false,
-      message: 'Unidentified Blog! pls include a valid blogId'
-    });
-  }
-  next();
-};
 
 export const blogTitleExist = (req, res, next) => {
   Blog

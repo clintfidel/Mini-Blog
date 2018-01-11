@@ -28,57 +28,45 @@ const BlogController = {
   },
 
   deleteArticle(req, res) {
-    const { id } = req.decoded.currentUser;
     Blog
-      .findById(req.params.blogId)
-      .then((currentBlog) => {
-        if (currentBlog.userId !== parseInt(id, 10)) {
-          return res.status(403).send({
-            message: 'sorry! you can only delete your own recipe'
+      .destroy({
+        where: {
+          id: +req.params.blogId
+        }
+      })
+      .then((blog) => {
+        if (blog) {
+          return res.status(200).send({
+            message: 'Blog deleted successfully'
           });
         }
-        return Blog
-          .destroy({
-            where: {
-              id: req.params.blogId,
-              userId: id
-            }
-          })
-          .then((blog) => {
-            if (blog) {
-              return res.status(200).send({
-                message: 'Blog deleted successfully'
-              });
-            }
-            return res.status(404).send({
-              message: 'No blog found ...'
-            });
-          });
+        return res.status(404).send({
+          message: 'No blog found ...'
+        });
       })
       .catch(() => {
-        res.status(500).send('Internal sever Error');
+        res.status(500).send('Internal server Error');
       });
   },
 
   editArticle(req, res) {
     const { id } = req.decoded.currentUser;
+
     Blog
-      .findById(+req.params.blogId)
-      .then((currentBlog) => {
-        if (currentBlog.userId !== parseInt(id, 10)) {
-          return res.status(403).send({
-            message: 'sorry! you can only edit your own recipe'
-          });
-        }
-        return Blog
-          .update(req.body, {
+      .findById(req.params.blogId)
+      .then((edit) => {
+        const blogObject = {
+          blogTitle: req.body.blogTitle,
+          blogPost: req.body.blogPost
+        };
+        edit
+          .update(blogObject, {
             where: {
               id: +req.params.blogId,
-              userId: id
             }
           })
-          .then((edit) => {
-            if (!edit) {
+          .then((edited) => {
+            if (!edited) {
               res.status(404).send({
                 message: 'No Blog found for edit'
               });
@@ -86,7 +74,7 @@ const BlogController = {
 
             return res.status(200).json({
               message: 'Blog sucessfully updated',
-              data: {
+              updatedBlog: {
                 blogTitle: req.body.blogTitle,
                 blogPost: req.body.blogPost,
                 rate: req.body.rate,

@@ -1,15 +1,15 @@
 import express from 'express';
 import articles from '../controllers/articles';
-import adminAction from '../controllers/admin';
 import { isLoggedIn, isAdmin } from '../middlewares/Authorization';
-import { checkArticleInput, validateEditUserId,
+import { checkArticleInput,
   verifyUserIdExist, verifyBlogIdExist,
-  blogTitleExist, verifyBlogIdParams } from '../middlewares/Validation';
+  blogTitleExist,
+  checkInvalidUser, } from '../middlewares/Validation';
 
 const {
   create, deleteArticle, editArticle, getAllArticles
 } = articles;
-const { adminDeleteArticle, adminEditArticle } = adminAction;
+
 const app = express.Router();
 
 app.route('/')
@@ -21,26 +21,23 @@ app.route('/')
 
 app.route('/delete/:blogId')
   .delete(
-    isLoggedIn, verifyBlogIdParams, verifyUserIdExist, verifyBlogIdExist,
+    isLoggedIn, verifyUserIdExist, verifyBlogIdExist, checkInvalidUser,
     deleteArticle
   );
 
 app.route('/edit/:blogId')
   .put(
     isLoggedIn, verifyUserIdExist, verifyBlogIdExist,
-    verifyBlogIdParams, blogTitleExist, validateEditUserId, editArticle
+    checkInvalidUser, editArticle
   );
 
 app.route('/admin/delete/:blogId')
-  .delete(
-    isLoggedIn, isAdmin, verifyBlogIdExist,
-    verifyBlogIdParams, adminDeleteArticle
-  );
+  .delete(isLoggedIn, isAdmin, verifyBlogIdExist, deleteArticle);
 
 app.route('/admin/edit/:blogId')
   .put(
-    isLoggedIn, isAdmin, verifyBlogIdExist, verifyBlogIdParams,
-    validateEditUserId, blogTitleExist, adminEditArticle
+    isLoggedIn, isAdmin, verifyBlogIdExist,
+    blogTitleExist, editArticle
   );
 
 export default app;
