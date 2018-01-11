@@ -1,6 +1,7 @@
 import express from 'express';
 import articles from '../controllers/articles';
-import { isLoggedIn } from '../middlewares/Authorization';
+import adminAction from '../controllers/admin';
+import { isLoggedIn, isAdmin } from '../middlewares/Authorization';
 import { checkArticleInput, validateEditUserId,
   verifyUserIdExist, verifyBlogIdExist,
   blogTitleExist } from '../middlewares/Validation';
@@ -8,6 +9,7 @@ import { checkArticleInput, validateEditUserId,
 const {
   create, deleteArticle, editArticle, getAllArticles
 } = articles;
+const { adminDeleteArticle } = adminAction;
 const app = express.Router();
 
 app.route('/')
@@ -26,5 +28,7 @@ app.route('/edit/:blogId')
     blogTitleExist, validateEditUserId, editArticle
   );
 
+app.route('/admin/delete/:blogId')
+  .delete(isLoggedIn, isAdmin, verifyBlogIdExist, adminDeleteArticle);
 
 export default app;
