@@ -4,10 +4,12 @@ import { isLoggedIn, isAdmin } from '../middlewares/Authorization';
 import { checkArticleInput,
   verifyUserIdExist, verifyBlogIdExist,
   blogTitleExist,
-  checkInvalidUser, checkReviewsInput, reviewExist } from '../middlewares/Validation';
+  checkInvalidUser, checkReviewsInput,
+  reviewExist } from '../middlewares/Validation';
 
 const {
-  create, deleteArticle, editArticle, getAllArticles, reviewArticles
+  create, deleteArticle, editArticle, reviewArticles,
+  getAllArticlesByPage
 } = articles;
 
 const app = express.Router();
@@ -17,7 +19,7 @@ app.route('/')
     isLoggedIn, checkArticleInput,
     blogTitleExist, verifyUserIdExist, create
   )
-  .get(isLoggedIn, getAllArticles);
+  .get(isLoggedIn, getAllArticlesByPage);
 
 app.route('/delete/:blogId')
   .delete(
