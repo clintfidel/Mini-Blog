@@ -89,6 +89,45 @@ const BlogController = {
       });
   },
 
+  getAllArticlesByPage(req, res) {
+    const pageNumber = Number(req.query.myPage);
+    const limit = 10;
+    let offset;
+    let page;
+    const message = 'Sorry no blog found for this page';
+    if (pageNumber === 0) {
+      offset = 0;
+    } else if (pageNumber > 0) {
+      page = pageNumber;
+      offset = limit * (page - 1);
+    } else {
+      offset = 0;
+    }
+    Blog
+      .findAndCountAll({
+        order: [['views', req.query.order || 'ASC']],
+        attributes: ['id', 'blogTitle', 'views'],
+        include: [{
+          model: db.User,
+          attributes: ['username', 'email']
+        }],
+        limit,
+        offset,
+      })
+      .then((blog) => {
+        const pages = Math.ceil(blog.count / limit);
+        if (!blog.count) {
+          return res.status(404).send('No Blog found');
+        } else if (pageNumber > pages) {
+          return res.status(404).send(message);
+        }
+        return res.status(200).json({ blog, count: blog.count, pages });
+      })
+      .catch(() => {
+        res.status(500).send('Internal sever Error');
+      });
+  },
+
   getAllArticles(req, res) {
     Blog
       .findAll({})
@@ -131,6 +170,9 @@ const BlogController = {
       });
   }
 
+  // rateArticles(req, res) {
+
+  // }
 };
 
 export default BlogController;
