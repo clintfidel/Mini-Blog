@@ -5,11 +5,12 @@ import { checkArticleInput,
   verifyUserIdExist, verifyBlogIdExist,
   blogTitleExist,
   checkInvalidUser, checkReviewsInput,
-  reviewExist } from '../middlewares/Validation';
+  reviewExist
+} from '../middlewares/Validation';
 
 const {
   create, deleteArticle, editArticle, reviewArticles,
-  getAllArticlesByPage
+  getAllArticlesByPage, rateArticles, viewArticles
 } = articles;
 
 const app = express.Router();
@@ -47,4 +48,10 @@ app.route('/review/:blogId')
     isLoggedIn, verifyBlogIdExist, verifyUserIdExist, reviewExist,
     checkReviewsInput, reviewArticles
   );
+
+app.route('/rate/:blogId')
+  .post(isLoggedIn, verifyBlogIdExist, rateArticles);
+
+app.route('/views/:blogId')
+  .post(isLoggedIn, viewArticles);
 export default app;
