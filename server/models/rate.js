@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     }
-    
   });
   Rate.associate = (models) => {
     Rate.belongsTo(models.User, {
