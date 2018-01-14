@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
-// import omit from 'lodash/omit'
+import omit from 'lodash/omit';
 import db from '../models';
+import { createRate } from '../middlewares/Validation';
 
 
 dotenv.load();
 
-const { Blog, Review } = db;
+const { Blog, Review, Rate } = db;
 
 const BlogController = {
   create(req, res) {
@@ -50,20 +51,17 @@ const BlogController = {
   },
 
   editArticle(req, res) {
-    const { id } = req.decoded.currentUser;
-
     Blog
       .findById(req.params.blogId)
-      .then((edit) => {
-        const blogObject = {
-          blogTitle: req.body.blogTitle,
-          blogPost: req.body.blogPost
-        };
-        edit
-          .update(blogObject, {
+      .then(() => {
+        const omitValue = omit(req.body, ['userId', 'views']);
+        Blog
+          .update(omitValue, {
             where: {
               id: +req.params.blogId,
-            }
+            },
+            returning: true,
+            plain: true
           })
           .then((edited) => {
             if (!edited) {
@@ -71,15 +69,13 @@ const BlogController = {
                 message: 'No Blog found for edit'
               });
             }
-
             return res.status(200).json({
               message: 'Blog sucessfully updated',
               updatedBlog: {
-                blogTitle: req.body.blogTitle,
-                blogPost: req.body.blogPost,
-                rate: req.body.rate,
-                blogId: req.params.blogId,
-                userId: id
+                blogTitle: edited[1].dataValues.blogTitle,
+                blogPost: edited[1].dataValues.blogPost,
+                rate: edited[1].dataValues.rate,
+                blogId: edited[1].dataValues.blogId,
               }
             });
           });
@@ -168,11 +164,66 @@ const BlogController = {
       .catch(() => {
         res.status(500).send('Internal server Error');
       });
+  },
+
+  rateArticles(req, res) {
+    const { id } = req.decoded.currentUser;
+    if (req.body.rate > 5) {
+      return res.status(403).json('pls rate this article from 1-5');
+    }
+    Rate
+      .findOne({
+        where: {
+          $and: [{ userId: id }, { blogId: req.params.blogId }]
+        }
+      })
+      .then((rates) => {
+        if (!rates) {
+          return Rate.create({
+            userId: id,
+            blogId: req.params.blogId,
+            rate: req.body.rate
+          })
+            .then(() => {
+              createRate(req.body.rate, res);
+            });
+        } else if (rates) {
+          const { rate } = req.body;
+          return Rate.update({ rate }, {
+            where: {
+              blogId: req.params.blogId
+            }
+
+          })
+            .then(() => res.status(200).json('Thanks for your rating!'));
+        }
+      })
+      .catch(() => {
+        res.status(500).send('Internal server Error');
+      });
+  },
+
+  viewArticles(req, res) {
+    Blog
+      .findOne({
+        where: {
+          id: req.params.blogId
+        }
+      })
+      .then((views) => {
+        if (!views) {
+          return res.status(404).json({
+            message: 'no blog found'
+          });
+        }
+        views.increment('views')
+          .then(() => views.reload());
+        return res.status(200).json({
+          message: 'success you have viewed this article;',
+          views
+        });
+      });
   }
-
-  // rateArticles(req, res) {
-
-  // }
 };
 
 export default BlogController;
