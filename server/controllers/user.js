@@ -14,7 +14,7 @@ const UserController = {
         if (activeUser) {
           const currentUser = omit(
             activeUser.dataValues,
-            ['password', 'createdAt', 'updatedAt']
+            ['isAdmin', 'password', 'createdAt', 'updatedAt']
           );
           const expiresIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
           const token = jwt.sign(

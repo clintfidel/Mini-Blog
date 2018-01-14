@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
-    rate: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,

@@ -17,9 +17,6 @@ module.exports = {
     views: {
       type: Sequelize.INTEGER
     },
-    rate: {
-      type: Sequelize.INTEGER
-    },
     userId: {
       type: Sequelize.INTEGER
     },

@@ -17,7 +17,7 @@ app.route('/signup')
   );
 
 app.route('/signIn')
-  .post(isLoggedIn, validateLogin, login);
+  .post(validateLogin, login);
 
 
 app.route('/editprofile')

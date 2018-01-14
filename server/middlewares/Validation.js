@@ -97,7 +97,6 @@ export const checkArticleInput = (req, res, next) => {
     instructions: req.body.instructions,
     blogPost: req.body.blogPost,
     views: req.body.views,
-    rate: req.body.rate,
     userId: req.decoded.currentUser.id
   };
   next();
@@ -359,3 +358,5 @@ export const createRate = (rate, res) => {
     message: `you rated this article ${result[rate - 1]}`
   });
 };
+
+
