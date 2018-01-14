@@ -359,4 +359,16 @@ export const createRate = (rate, res) => {
   });
 };
 
-
+export const validBlogIdParams = (req, res, next) => {
+  const errorMessage = 'pls input a valid id! Numbers expected';
+  if (req.params.blogId && req.params.blogId !== 'number') {
+    return res.status(401).json({
+      message: errorMessage
+    });
+  } else if (!req.params.blogId) {
+    return res.status(401).json({
+      message: errorMessage
+    });
+  }
+  next();
+};
