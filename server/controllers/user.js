@@ -16,7 +16,6 @@ const UserController = {
             activeUser.dataValues,
             ['password', 'createdAt', 'updatedAt']
           );
-          console.log(currentUser);
           const expiresIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
           const token = jwt.sign(
             { currentUser, expiresIn },
