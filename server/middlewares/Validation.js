@@ -1,12 +1,14 @@
 import bcrypt from 'bcrypt';
 // import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-// import winston from 'winston';
+// import omit from 'lodash/omit';
 import db from '../models/';
 
 dotenv.config();
 
-const { User, Blog, Review } = db;
+const {
+  User, Blog, Review
+} = db;
 
 
 export const checkUserInput = (req, res, next) => {
@@ -300,12 +302,8 @@ export const verifyBlogIdExist = (req, res, next) => {
       message: 'Unidentified Blog! pls include a valid blogId'
     });
   }
-  Blog
-    .findOne({
-      where: {
-        id: req.params.blogId
-      }
-    })
+  return Blog
+    .findById(req.params.blogId)
     .then((blog) => {
       if (!blog) {
         return res.status(404).send({
@@ -340,10 +338,8 @@ export const reviewExist = (req, res, next) => {
   Review
     .findOne({
       where: {
-        $and: {
-          blogId: req.params.blogId,
-          userId: id
-        }
+        $and: [{ blogId: req.params.blogId },
+          { userId: id }]
       }
     })
     .then((review) => {
@@ -355,4 +351,11 @@ export const reviewExist = (req, res, next) => {
       next();
     })
     .catch(() => res.status(500).send('Internal server Error'));
+};
+
+export const createRate = (rate, res) => {
+  const result = ['Bad', 'Satisfactory', 'Good', 'Very Good', 'Great'];
+  res.status(200).json({
+    message: `you rated this article ${result[rate - 1]}`
+  });
 };
