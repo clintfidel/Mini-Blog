@@ -50,8 +50,8 @@ app.route('/review/:blogId')
   );
 
 app.route('/rate/:blogId')
-  .post(isLoggedIn, verifyBlogIdExist, rateArticles);
+  .post(isLoggedIn, verifyBlogIdExist, verifyUserIdExist, rateArticles);
 
 app.route('/views/:blogId')
-  .post(isLoggedIn, viewArticles);
+  .post(isLoggedIn, verifyBlogIdExist, verifyUserIdExist, viewArticles);
 export default app;
