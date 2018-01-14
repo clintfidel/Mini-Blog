@@ -10,20 +10,26 @@ const { Blog, Review, Rate } = db;
 
 const BlogController = {
   create(req, res) {
-    Blog.create(req.blogInput);
-    [{
-      model: db.User,
-      attributes: ['username']
-    }]
-      .then((result) => {
-        res.status(200).json({
-          message: 'Blog successfully created!',
-          data: {
-            blogTitle: result.blogTitle,
-            blogId: result.id,
-            userId: result.userId
-          }
-        });
+    Blog
+      .findOne({
+        where: {
+          id: req.params.blogId
+        }
+      })
+      .then((blog) => {
+        if (!blog) {
+          Blog.create(req.blogInput)
+            .then((result) => {
+              res.status(200).json({
+                message: 'Blog successfully created!',
+                data: {
+                  blogTitle: result.blogTitle,
+                  blogId: result.id,
+                  userId: result.userId
+                }
+              });
+            });
+        }
       })
       .catch(() => {
         res.status(500).json({
@@ -79,6 +85,7 @@ const BlogController = {
                 blogTitle: edited[1].dataValues.blogTitle,
                 blogPost: edited[1].dataValues.blogPost,
                 blogId: edited[1].dataValues.blogId,
+                userId: req.decoded.currentUser.id
               }
             });
           });
@@ -172,7 +179,13 @@ const BlogController = {
   rateArticles(req, res) {
     const { id } = req.decoded.currentUser;
     if (req.body.rate > 5) {
-      return res.status(403).json('pls rate this article from 1-5');
+      return res.status(403).json({
+        message: 'pls rate article from 1-5'
+      });
+    } else if (req.body.rate === 0) {
+      return res.status(200).json({
+        message: ' you didnt rate this article'
+      });
     }
     Rate
       .findOne({
@@ -198,7 +211,9 @@ const BlogController = {
             }
 
           })
-            .then(() => res.status(200).json('Thanks for your rating!'));
+            .then(() => res.status(200).json({
+              message: 'Thanks for your rating!'
+            }));
         }
       })
       .catch(() => {
