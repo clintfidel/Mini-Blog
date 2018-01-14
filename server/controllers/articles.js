@@ -10,7 +10,11 @@ const { Blog, Review, Rate } = db;
 
 const BlogController = {
   create(req, res) {
-    Blog.create(req.blogInput)
+    Blog.create(req.blogInput);
+    [{
+      model: db.User,
+      attributes: ['username']
+    }]
       .then((result) => {
         res.status(200).json({
           message: 'Blog successfully created!',
@@ -74,7 +78,6 @@ const BlogController = {
               updatedBlog: {
                 blogTitle: edited[1].dataValues.blogTitle,
                 blogPost: edited[1].dataValues.blogPost,
-                rate: edited[1].dataValues.rate,
                 blogId: edited[1].dataValues.blogId,
               }
             });
