@@ -9,6 +9,18 @@ dotenv.load();
 const { Blog, Review, Rate } = database;
 
 const BlogController = {
+
+  /**
+   * @description - User add blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: POST: /
+   */
   create(req, res) {
     Blog
       .findOne({
@@ -38,6 +50,17 @@ const BlogController = {
       });
   },
 
+  /**
+   * @description - User delete blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: DELETE: /delete/:blogId
+   */
   deleteArticle(req, res) {
     Blog
       .destroy({
@@ -60,6 +83,17 @@ const BlogController = {
       });
   },
 
+  /**
+   * @description - User edit blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: POST: /edit/:blogId
+   */
   editArticle(req, res) {
     Blog
       .findById(req.params.blogId)
@@ -95,6 +129,17 @@ const BlogController = {
       });
   },
 
+  /**
+   * @description - User get all blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: GET: /
+   */
   getAllArticlesByPage(req, res) {
     const pageNumber = Number(req.query.myPage);
     const limit = 10;
@@ -134,6 +179,17 @@ const BlogController = {
       });
   },
 
+  /**
+   * @description - User get all blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: GET: /
+   */
   getAllArticles(req, res) {
     Blog
       .findAll({})
@@ -148,6 +204,17 @@ const BlogController = {
       .catch(() => res.status(500).send('Internal server Error'));
   },
 
+  /**
+   * @description - User review blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: POST: /review/:blogId
+   */
   reviewArticles(req, res) {
     const { id } = req.decoded.currentUser;
     Review
@@ -176,6 +243,17 @@ const BlogController = {
       });
   },
 
+  /**
+   * @description - User rate blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: POST: /rate/:blogId
+   */
   rateArticles(req, res) {
     const { id } = req.decoded.currentUser;
     if (req.body.rate > 5) {
@@ -221,6 +299,17 @@ const BlogController = {
       });
   },
 
+  /**
+   * @description - User view blog
+   *
+   * @param  {object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {Object} - Success message
+   *
+   * ROUTE: POST: /view/:blogId
+   */
   viewArticles(req, res) {
     Blog
       .findOne({

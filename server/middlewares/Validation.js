@@ -2,15 +2,25 @@ import bcrypt from 'bcrypt';
 // import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 // import omit from 'lodash/omit';
-import db from '../models/';
+import database from '../models/';
 
 dotenv.config();
 
 const {
   User, Blog, Review
-} = db;
+} = database;
 
-
+/**
+   * @description - Checks that a user signs in with right details
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const checkUserInput = (req, res, next) => {
   const userNameError = 'Please provide a username with atleast 5 characters.';
   req.checkBody({
@@ -65,6 +75,17 @@ export const checkUserInput = (req, res, next) => {
   next();
 };
 
+/**
+   * @description - Checks that a user adds article with right details
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const checkArticleInput = (req, res, next) => {
   const lengthError = 'Please provide a title with atleast 5 characters.';
   req.checkBody({
@@ -102,6 +123,17 @@ export const checkArticleInput = (req, res, next) => {
   next();
 };
 
+/**
+   * @description - Checks that a user reviews with right details
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const checkReviewsInput = (req, res, next) => {
   const lengthError = 'Please add words of at least 5 characters long.';
   req.checkBody({
@@ -133,6 +165,17 @@ export const checkReviewsInput = (req, res, next) => {
   next();
 };
 
+/**
+   * @description - Checks that a user can't sign in with same username
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const isSignedUpWithUsername = (req, res, next) => {
   User
     .findOne({
@@ -150,6 +193,17 @@ export const isSignedUpWithUsername = (req, res, next) => {
     });
 };
 
+/**
+   * @description - Checks that a user can't sign in with same email
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const isSignedUpWithEmail = (req, res, next) => {
   User
     .findOne({
@@ -167,6 +221,17 @@ export const isSignedUpWithEmail = (req, res, next) => {
     });
 };
 
+/**
+   * @description - checks that a user is logged in with right details
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const validateLogin = (req, res, next) => {
   if (!req.body.username || !req.body.password) {
     return res.status(400)
@@ -196,6 +261,17 @@ export const validateLogin = (req, res, next) => {
     }));
 };
 
+/**
+   * @description - validates User input
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const validateEdituser = (req, res, next) => {
   const userNameError = 'Please provide a username with atleast 5 characters.';
   req.checkBody({
@@ -243,6 +319,17 @@ export const validateEdituser = (req, res, next) => {
     });
 };
 
+/**
+   * @description - verifies that userId can't be edited
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const validateEditUserId = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   Blog
@@ -260,6 +347,17 @@ export const validateEditUserId = (req, res, next) => {
     .catch(() => res.status(500).send('Internal server Error'));
 };
 
+/**
+   * @description - Checks that a user is a valid user
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const checkInvalidUser = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   Blog
@@ -274,6 +372,17 @@ export const checkInvalidUser = (req, res, next) => {
     });
 };
 
+/**
+   * @description - Checks if UserId exist in database
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const verifyUserIdExist = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   User
@@ -293,6 +402,17 @@ export const verifyUserIdExist = (req, res, next) => {
     .catch(error => res.status(404).send(error.errors));
 };
 
+/**
+   * @description - Checks if params input is valid
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const verifyBlogIdExist = (req, res, next) => {
   if (req.params.blogId.match(/^[0-9]/) === null
   || !req.params.blogId) {
@@ -314,7 +434,17 @@ export const verifyBlogIdExist = (req, res, next) => {
     .catch(error => res.status(404).send(error.errors));
 };
 
-
+/**
+   * @description - Checks if a blogTitle exist in the database
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const blogTitleExist = (req, res, next) => {
   Blog
     .findOne({
@@ -332,6 +462,17 @@ export const blogTitleExist = (req, res, next) => {
     });
 };
 
+/**
+   * @description - Checks if a user has reviewed a blog
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const reviewExist = (req, res, next) => {
   const { id } = req.decoded.currentUser;
   Review
@@ -352,6 +493,15 @@ export const reviewExist = (req, res, next) => {
     .catch(() => res.status(500).send('Internal server Error'));
 };
 
+/**
+   * @description - gets users rating
+   *
+   * @param  {Object} rate - request
+   *
+   * @param  {object} res - response
+   *
+   * @return {object} - status code and user rating
+   */
 export const createRate = (rate, res) => {
   const result = ['Bad', 'Satisfactory', 'Good', 'Very Good', 'Great'];
   res.status(200).json({
@@ -359,6 +509,17 @@ export const createRate = (rate, res) => {
   });
 };
 
+/**
+   * @description - Checks if params input is valid
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - status code and error message
+   */
 export const validBlogIdParams = (req, res, next) => {
   const errorMessage = 'pls input a valid id! Numbers expected';
   if (req.params.blogId && req.params.blogId !== 'number') {

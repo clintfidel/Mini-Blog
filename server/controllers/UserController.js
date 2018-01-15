@@ -1,13 +1,24 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import omit from 'lodash/omit';
-import db from '../models';
+import database from '../models';
 
 dotenv.load();
 const secret = process.env.secretkey;
 
-const { User } = db;
+const { User } = database;
 const UserController = {
+  /**
+   * @description - Adds a new user to the database
+   *
+   * @param  {object} req - request object
+   *
+   * @param  {object} res - response object
+   *
+   * @return {Object} - Object containing user detail in form of token
+   *
+   * Route: POST: /users/signup
+   */
   signUp(req, res) {
     return User.create(req.userInput)
       .then((activeUser) => {
@@ -37,6 +48,17 @@ const UserController = {
       });
   },
 
+  /**
+   * @description - logs a user in with authenticated details
+   *
+   * @param  {object} req - request object
+   *
+   * @param  {object} res - response object
+   *
+   * @return {Object} - Object containing user detail in token form
+   *
+   * Route: POST: /users/signin
+   */
   login(req, res) {
     User
       .findOne({
@@ -62,6 +84,17 @@ const UserController = {
       .catch(() => res.status(500).json('Internal server error'));
   },
 
+  /**
+   * @description - User edit profile
+   *
+   * @param  {object} req - request object
+   *
+   * @param  {object} res - response object
+   *
+   * @return {Object} - success message and user updated profile
+   *
+   * Route: POST: /users/edit/:userId
+   */
   editProfile(req, res) {
     const { id } = req.decoded.currentUser;
     User
@@ -100,6 +133,17 @@ const UserController = {
       });
   },
 
+  /**
+   * @description - Admin gets all user in database
+   *
+   * @param  {object} req - request object
+   *
+   * @param  {object} res - response object
+   *
+   * @return {Object} - Object containing a list of all users
+   *
+   * Route: POST: /users/signup
+   */
   getAllUsers(req, res) {
     User.findAll({})
       .then((user) => {

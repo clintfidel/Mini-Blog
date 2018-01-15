@@ -4,6 +4,17 @@ import dotenv from 'dotenv';
 dotenv.load();
 const key = process.env.secretKey;
 
+ /**
+   * @description - Checks if logged in user has valid AUTH token
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {null} - null
+   */
 export const isLoggedIn = (req, res, next) => {
   let token;
   const tokenAvailable = req.headers.authorization ||
@@ -34,6 +45,17 @@ export const isLoggedIn = (req, res, next) => {
   }
 };
 
+ /**
+   * @description - Checks if logged in user is an authenticated Admin
+   *
+   * @param  {Object} req - request
+   *
+   * @param  {object} res - response
+   *
+   * @param {Object} next - Call back function
+   *
+   * @return {object} - contains status code and error message
+   */
 export const isAdmin = (req, res, next) => {
   const decodeToken = req.decoded;
   if (decodeToken.currentUser.isAdmin === 0 ||
