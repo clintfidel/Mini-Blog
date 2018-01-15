@@ -228,37 +228,16 @@ export const isSignedUpWithEmail = (req, res, next) => {
    *
    * @param  {object} res - response
    *
-   * @param {Object} next - Call back function
    *
    * @return {object} - status code and error message
    */
-export const validateLogin = (req, res, next) => {
+export const validateLogin = (req, res) => {
   if (!req.body.username || !req.body.password) {
     return res.status(400)
       .json({
         message: 'Please provide your username or password to login'
       });
   }
-  User.findOne({
-    where: {
-      username: req.body.username
-    }
-  })
-    .then((user) => {
-      if (user &&
-          bcrypt.compareSync(req.body.password, user.password)) {
-        next();
-      } else {
-        return res.status(401)
-          .json({
-            ' message': 'Invalid Credentials.'
-          });
-      }
-    })
-    .catch(error => res.status(401).send({
-      error,
-      message: 'invalid details passed'
-    }));
 };
 
 /**
