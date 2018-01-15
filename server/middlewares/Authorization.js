@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.load();
 const key = process.env.secretKey;
 
- /**
+/**
    * @description - Checks if logged in user has valid AUTH token
    *
    * @param  {Object} req - request
@@ -45,7 +45,7 @@ export const isLoggedIn = (req, res, next) => {
   }
 };
 
- /**
+/**
    * @description - Checks if logged in user is an authenticated Admin
    *
    * @param  {Object} req - request
