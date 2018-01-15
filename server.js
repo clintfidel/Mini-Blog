@@ -3,8 +3,8 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import winston from 'winston';
 import validator from 'express-validator';
-import BlogRoutes from './server/routes/article';
-import UserRoutes from './server/routes/user';
+import BlogRoutes from './server/routes/blogRouter';
+import UserRoutes from './server/routes/userRouter';
 
 const app = express();
 

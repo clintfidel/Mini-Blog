@@ -13,46 +13,46 @@ const {
   getAllArticlesByPage, rateArticles, viewArticles
 } = Blog;
 
-const app = express.Router();
+const blogRouter = express.Router();
 
-app.route('/')
+blogRouter.route('/')
   .post(
     isLoggedIn, checkArticleInput,
     blogTitleExist, verifyUserIdExist, create
   )
   .get(isLoggedIn, getAllArticlesByPage);
 
-app.route('/delete/:blogId')
+blogRouter.route('/delete/:blogId')
   .delete(
     isLoggedIn, verifyUserIdExist, verifyBlogIdExist, checkInvalidUser,
     deleteArticle
   );
 
-app.route('/edit/:blogId')
+blogRouter.route('/edit/:blogId')
   .put(
     isLoggedIn, verifyUserIdExist, verifyBlogIdExist,
     checkInvalidUser, editArticle
   );
 
-app.route('/admin/delete/:blogId')
+blogRouter.route('/admin/delete/:blogId')
   .delete(isLoggedIn, isAdmin, verifyBlogIdExist, deleteArticle);
 
-app.route('/admin/edit/:blogId')
+blogRouter.route('/admin/edit/:blogId')
   .put(
     isLoggedIn, isAdmin, verifyBlogIdExist,
     blogTitleExist, editArticle
   );
 
-app.route('/review/:blogId')
+blogRouter.route('/review/:blogId')
   .post(
     isLoggedIn, verifyBlogIdExist, verifyUserIdExist, reviewExist,
     checkReviewsInput, reviewArticles
   );
 
-app.route('/rate/:blogId')
+blogRouter.route('/rate/:blogId')
   .post(isLoggedIn, verifyBlogIdExist, verifyUserIdExist, rateArticles);
 
-app.route('/views/:blogId')
+blogRouter.route('/views/:blogId')
   .post(isLoggedIn, verifyBlogIdExist, verifyUserIdExist, viewArticles);
 
-export default app;
+export default blogRouter;

@@ -8,22 +8,23 @@ import { checkUserInput, isSignedUpWithEmail,
 const {
   signUp, login, editProfile, getAllUsers
 } = user;
-const app = express.Router();
+const userRouter = express.Router();
 
-app.route('/signup')
+userRouter.route('/signup')
   .post(
     checkUserInput, isSignedUpWithEmail,
     isSignedUpWithUsername, signUp
   );
 
-app.route('/signIn')
+userRouter.route('/signIn')
   .post(validateLogin, login);
 
 
-app.route('/editprofile')
+userRouter.route('/editprofile')
   .put(isLoggedIn, isSignedUpWithEmail, validateEdituser, editProfile);
 
-app.route('/')
+userRouter.route('/')
   .get(isLoggedIn, isAdmin, getAllUsers);
-export default app;
+
+export default userRouter;
 
