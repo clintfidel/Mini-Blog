@@ -1,5 +1,5 @@
 import express from 'express';
-import articles from '../controllers/articles';
+import Blog from '../controllers/BlogController';
 import { isLoggedIn, isAdmin } from '../middlewares/Authorization';
 import { checkArticleInput,
   verifyUserIdExist, verifyBlogIdExist,
@@ -11,7 +11,7 @@ import { checkArticleInput,
 const {
   create, deleteArticle, editArticle, reviewArticles,
   getAllArticlesByPage, rateArticles, viewArticles
-} = articles;
+} = Blog;
 
 const app = express.Router();
 
@@ -54,4 +54,5 @@ app.route('/rate/:blogId')
 
 app.route('/views/:blogId')
   .post(isLoggedIn, verifyBlogIdExist, verifyUserIdExist, viewArticles);
+
 export default app;

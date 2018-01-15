@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 import omit from 'lodash/omit';
-import db from '../models';
+import database from '../models';
 import { createRate } from '../middlewares/Validation';
 
 
 dotenv.load();
 
-const { Blog, Review, Rate } = db;
+const { Blog, Review, Rate } = database;
 
 const BlogController = {
   create(req, res) {
@@ -114,7 +114,7 @@ const BlogController = {
         order: [['views', req.query.order || 'ASC']],
         attributes: ['id', 'blogTitle', 'views'],
         include: [{
-          model: db.User,
+          model: database.User,
           attributes: ['username', 'email']
         }],
         limit,

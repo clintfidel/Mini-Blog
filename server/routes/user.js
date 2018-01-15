@@ -1,5 +1,5 @@
 import express from 'express';
-import user from '../controllers/user';
+import user from '../controllers/UserController';
 import { isLoggedIn, isAdmin } from '../middlewares/Authorization';
 import { checkUserInput, isSignedUpWithEmail,
   isSignedUpWithUsername, validateEdituser,
