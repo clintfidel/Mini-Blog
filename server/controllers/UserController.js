@@ -74,7 +74,7 @@ const UserController = {
           .then((result) => {
             const currentUser = omit(
               result.dataValues,
-              ['password', 'createdAt', 'updatedAt']
+              ['isAdmin', 'password', 'createdAt', 'updatedAt']
             );
             const token = jwt.sign(
               {
