@@ -32,12 +32,12 @@ const BlogController = {
         if (!blog) {
           Blog.create(req.blogInput)
             .then((result) => {
+              const { blogTitle, id } = result;
               res.status(200).json({
                 message: 'Blog successfully created!',
                 data: {
-                  blogTitle: result.blogTitle,
-                  blogId: result.id,
-                  userId: result.userId
+                  blogTitle,
+                  id
                 }
               });
             });
@@ -95,6 +95,7 @@ const BlogController = {
    * ROUTE: POST: /edit/:blogId
    */
   editArticle(req, res) {
+    const { id } = req.decoded.currentUser;
     Blog
       .findById(req.params.blogId)
       .then(() => {
@@ -119,7 +120,7 @@ const BlogController = {
                 blogTitle: edited[1].dataValues.blogTitle,
                 blogPost: edited[1].dataValues.blogPost,
                 blogId: edited[1].dataValues.blogId,
-                userId: req.decoded.currentUser.id
+                userId: id
               }
             });
           });
@@ -228,12 +229,13 @@ const BlogController = {
         Review
           .create(req.reviewInput)
           .then((review) => {
+            const { blogId, comments } = review;
             res.status(201).json({
               message: 'you have successfully reviewed this article',
               reviewData: {
                 user: id,
-                blogId: review.blogId,
-                content: review.comments
+                blogId,
+                comments
               }
             });
           });
@@ -272,17 +274,17 @@ const BlogController = {
         }
       })
       .then((rates) => {
+        const { blogId, rate } = req.body;
         if (!rates) {
           return Rate.create({
             userId: id,
-            blogId: req.params.blogId,
-            rate: req.body.rate
+            blogId,
+            rate
           })
             .then(() => {
               createRate(req.body.rate, res);
             });
         } else if (rates) {
-          const { rate } = req.body;
           return Rate.update({ rate }, {
             where: {
               blogId: req.params.blogId
