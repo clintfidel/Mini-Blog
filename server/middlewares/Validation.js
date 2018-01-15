@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
-// import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-// import omit from 'lodash/omit';
 import database from '../models/';
 
 dotenv.config();
@@ -228,16 +226,18 @@ export const isSignedUpWithEmail = (req, res, next) => {
    *
    * @param  {object} res - response
    *
+   * @param {Object} next - Call back function
    *
    * @return {object} - status code and error message
    */
-export const validateLogin = (req, res) => {
+export const validateLogin = (req, res, next) => {
   if (!req.body.username || !req.body.password) {
     return res.status(400)
       .json({
         message: 'Please provide your username or password to login'
       });
   }
+  next();
 };
 
 /**

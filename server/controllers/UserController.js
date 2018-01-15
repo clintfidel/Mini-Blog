@@ -61,11 +61,16 @@ const UserController = {
    * Route: POST: /users/signin
    */
   login(req, res) {
-    User
+    if (!req.body.username || !req.body.password) {
+      return res.status(400)
+        .json({
+          message: 'Please provide your username or password to login'
+        });
+    }
+    return User
       .findOne({
         where: { username: req.body.username }
       })
-
       .then((user) => {
         if (user &&
           bcrypt.compareSync(req.body.password, user.password)) {
@@ -78,17 +83,16 @@ const UserController = {
             { expireIn, currentUser },
             process.env.secretKey
           );
-          res.status(200)
+          return res.status(200)
             .json({
               message: 'Logged In Successfully',
               token
             });
-        } else {
-          return res.status(401)
-            .json({
-              ' message': 'Invalid Credentials.'
-            });
         }
+        return res.status(401)
+          .json({
+            ' message': 'Invalid Credentials.'
+          });
       })
       .catch(() => res.status(500).json('Internal server error'));
   },
