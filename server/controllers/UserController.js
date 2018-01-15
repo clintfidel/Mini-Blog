@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import omit from 'lodash/omit';
 import database from '../models';
@@ -65,21 +66,29 @@ const UserController = {
         where: { username: req.body.username }
       })
 
-      .then((result) => {
-        const currentUser = omit(
-          result.dataValues,
-          ['password', 'createdAt', 'updatedAt']
-        );
-        const expireIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
-        const token = jwt.sign(
-          { expireIn, currentUser },
-          process.env.secretKey
-        );
-        res.status(200)
-          .json({
-            message: 'Logged In Successfully',
-            token
-          });
+      .then((user) => {
+        if (user &&
+          bcrypt.compareSync(req.body.password, user.password)) {
+          const currentUser = omit(
+            user.dataValues,
+            ['password', 'createdAt', 'updatedAt']
+          );
+          const expireIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
+          const token = jwt.sign(
+            { expireIn, currentUser },
+            process.env.secretKey
+          );
+          res.status(200)
+            .json({
+              message: 'Logged In Successfully',
+              token
+            });
+        } else {
+          return res.status(401)
+            .json({
+              ' message': 'Invalid Credentials.'
+            });
+        }
       })
       .catch(() => res.status(500).json('Internal server error'));
   },
@@ -102,31 +111,27 @@ const UserController = {
         where: { id }
       })
       .then((edit) => {
+        const omitValue =
+        omit(req.body, ['isAdmin', 'password', 'createdAt', 'updatedAt']);
         edit
-          .update(req.body)
-          .then((result) => {
-            const currentUser = omit(
-              result.dataValues,
-              ['isAdmin', 'password', 'createdAt', 'updatedAt']
-            );
-            const token = jwt.sign(
-              {
-                currentUser,
-                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
-              },
-              process.env.secretKey
-            );
-            return res.status(200).json({
-              message: 'profile edited successfully!!!',
-              token,
-              data: {
-                fullname: result.fullname,
-                username: result.username,
-                email: result.email,
-                id: result.id
-              }
-            });
-          })
+          .update(omitValue);
+        const token = jwt.sign(
+          {
+            omitValue,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+          },
+          process.env.secretKey
+        );
+        return res.status(200).json({
+          message: 'profile edited successfully!!!',
+          token,
+          data: {
+            fullname: edit.fullname,
+            username: edit.username,
+            email: edit.email,
+            id: edit.id
+          }
+        })
           .catch(() => res.status(500).json({
             message: 'internal server error'
           }));
