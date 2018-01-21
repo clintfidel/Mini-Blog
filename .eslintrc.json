@@ -56,6 +56,9 @@
         "experimentalObjectRestSpread": true
       }
     },
+    "plugins": [
+      "react"
+  ],
     "require-jsdoc": [
       "error",
       {
