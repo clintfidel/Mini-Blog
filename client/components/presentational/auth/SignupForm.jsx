@@ -19,12 +19,12 @@ class SignupForm extends Component {
     this.onChange = this.onChange.bind(this)
     this.onFocus = this.onFocus.bind(this)
     this.onBlur = this.onBlur.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   onChange (event) {
     const name = event.target.name
     const value = event.target.value
-    console.log('onChange:' + value)
     this.setState({
       [name]: value
     })
@@ -43,33 +43,33 @@ class SignupForm extends Component {
         this.setState({passwordError: ''})
         break
       case 'confirmPassword':
-        this.setState({passwordConfirm: ''})
+        this.setState({confirmPasswordError: ''})
         break
     }
   }
   onBlur (event) {
-    const name = event.target.name
-    const value = event.target.value
-    let password = document.getElementById('password').value
+    const name = event.target.name,
+     value = event.target.value,
+      password = document.getElementById('password').value
     switch (name) {
       case 'username':
-        if (value.length < 5 || value.length === '') {
-          this.setState({username: 'Username should be more than 5 characters'})
+        if (value.length < 5 || value === ' ') {
+          this.setState({usernameError: 'Username should be more than 5 characters'})
         }
         break
       case 'email':
       if(!(value.endsWith('.com') && /@/.test(value))) {
-        this.setState({ emailError: 'invalid email'})
+        this.setState({ emailError: 'Invalid email'})
       }
         break
       case 'password':
-        if (value.length < 5 || value.length === '') {
-          this.setState({username: 'Username should be more than 5 characters'})
+        if (value.length < 5 || value === ' ') {
+          this.setState({passwordError: 'Your password is required'})
         }
         break
       case 'confirmPassword':
-        if (value !== this.state.password) {
-          this.setState({username: 'Username should be more than 5 characters'})
+        if (value !== password) {
+          this.setState({confirmPasswordError: 'password do not match!'})
         }
         break
     }
@@ -79,13 +79,15 @@ class SignupForm extends Component {
     event.preventDefault();
     this.setState({
       isLoading: true
-    })
+    });
+    this.props.registerAction(this.state)
   }
 
   render () {
     return (
       <div>
         <form
+        onSubmit = {this.onSubmit}
           id='register-form'
           action='#'
           role='form'
@@ -98,7 +100,8 @@ class SignupForm extends Component {
               id='fullname'
               tabIndex='-1'
               className='form-control'
-              placeholder='Fullname' />
+              placeholder='Fullname' 
+              required/>
           </div>
           <div className='form-group'>
             <input
@@ -110,8 +113,9 @@ class SignupForm extends Component {
               className='form-control'
               onFocus={this.onFocus}
               onBlur={this.onBlur}
-              placeholder='Username' />
-              <div style = {{color: 'red'}}>{this.state.passwordConfirm}</div>
+              placeholder='Username' 
+              required/>
+              <div style = {{color: 'red'}}>{this.state.usernameError}</div>
           </div>
           <div className='form-group'>
             <input
@@ -123,8 +127,9 @@ class SignupForm extends Component {
               className='form-control'
               onFocus={this.onFocus}
               onBlur={this.onBlur}
-              placeholder='Email Address' />
-              <div style = {{color: 'red'}}>{this.state.passwordConfirm}</div>
+              placeholder='Email Address' 
+              required/>
+              <div style = {{color: 'red'}}>{this.state.emailError}</div>
           </div>
           <div className='form-group'>
             <input
@@ -136,21 +141,23 @@ class SignupForm extends Component {
               className='form-control'
               onFocus={this.onFocus}
               onBlur={this.onBlur}
-              placeholder='Password' />
-              <div style = {{color: 'red'}}>{this.state.passwordConfirm}</div>
+              placeholder='Password' 
+              required/>
+              <div style = {{color: 'red'}}>{this.state.passwordError}</div>
           </div>
           <div className='form-group'>
             <input
               onChange={this.onChange}
               type='password'
-              name='confirPassword'
-              id='confirPassword'
+              name='confirmPassword'
+              id='confirmPassword'
               tabIndex='-3'
               className='form-control'
               onFocus={this.onFocus}
               onBlur={this.onBlur}
-              placeholder='Confirm Password' />
-              <div style = {{color: 'red'}}>{this.state.passwordConfirm}</div>
+              placeholder='Confirm Password' 
+              required/>
+              <div style = {{color: 'red'}}>{this.state.confirmPasswordError}</div>
           </div>
           <div className='form-group'>
             <div className='row'>
@@ -174,8 +181,8 @@ class SignupForm extends Component {
   }
 }
 
-// SignupForm.propTypes = {
-
-// }
+SignupForm.propTypes = {
+  registerAction: PropTypes.func.isRequired
+}
 
 export default SignupForm
