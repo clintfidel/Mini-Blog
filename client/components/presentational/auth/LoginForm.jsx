@@ -26,7 +26,7 @@ class LoginForm extends Component {
 		this.setState({
 			isLoading: true
 		})
-		console.log('submit' + JSON.stringify(this.state))
+		this.props.loginAction(this.state)
 	}
 
   render () {
@@ -98,8 +98,8 @@ class LoginForm extends Component {
   }
 }
 
-// LoginForm.propTypes = {
-
-// }
+LoginForm.propTypes = {
+	loginAction: PropTypes.func.isRequired
+}
 
 export default LoginForm
