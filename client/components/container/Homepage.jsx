@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import LoginForm from '../presentational/auth/LoginForm'
 import SignupForm from '../presentational/auth/SignupForm'
+import { registerAction, loginAction } from '../../actions/AuthAction'
 
-class HomePage extends Component {
-  render () {
-    return (
+
+const HomePage =(props)=> (
       <div>
       <img src="../images/blog (1).jpg" alt="my logo"/>
       <div className="container">
@@ -27,8 +28,8 @@ class HomePage extends Component {
               <div className="panel-body">
                 <div className="row">
                   <div className="col-lg-12">
-                  <LoginForm/>
-                   <SignupForm/>
+                  <LoginForm loginAction={props.loginAction}/>
+                   <SignupForm registerAction={props.registerAction}/>
                   </div>
                 </div>
               </div>
@@ -39,11 +40,9 @@ class HomePage extends Component {
       </div>
       
     )
-  }
+HomePage.propTypes = {
+  registerAction: PropTypes.func.isRequired,
+  loginAction: PropTypes.func.isRequired
 }
 
-// HomePage.propTypes = {
-
-// }
-
-export default HomePage
+export default connect(null, {registerAction,loginAction})(HomePage)
