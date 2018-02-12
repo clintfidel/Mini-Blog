@@ -205,6 +205,24 @@ const BlogController = {
       .catch(() => res.status(500).send('Internal server Error'));
   },
 
+  getOneArticle(req, res) {
+    Blog
+      .findOne({
+        where: {
+          id: req.params.blogId
+        }
+      })
+      .then((blog) => {
+        if (!blog) {
+          return res.status(404).json({
+            message: 'No blog found'
+          });
+        }
+        return res.status(200).json(blog);
+      })
+      .catch(() => res.status(500).send('Internal server Error'));
+  },
+
   /**
    * @description - User review blog
    *

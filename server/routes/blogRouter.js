@@ -10,7 +10,7 @@ import { checkArticleInput,
 
 const {
   create, deleteArticle, editArticle, reviewArticles,
-  getAllArticlesByPage, rateArticles, viewArticles
+  getAllArticlesByPage, rateArticles, viewArticles, getOneArticle
 } = Blog;
 
 const blogRouter = express.Router();
@@ -48,6 +48,9 @@ blogRouter.route('/review/:blogId')
     isLoggedIn, verifyBlogIdExist, verifyUserIdExist, reviewExist,
     checkReviewsInput, reviewArticles
   );
+
+blogRouter.route('/:blogId')
+  .get(getOneArticle);
 
 blogRouter.route('/rate/:blogId')
   .post(isLoggedIn, verifyBlogIdExist, verifyUserIdExist, rateArticles);

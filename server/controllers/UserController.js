@@ -91,7 +91,7 @@ const UserController = {
         }
         return res.status(401)
           .json({
-            ' message': 'Invalid Credentials.'
+            message: 'Invalid Credentials.'
           });
       })
       .catch(() => res.status(500).json('Internal server error'));
