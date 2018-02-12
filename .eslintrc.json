@@ -8,6 +8,20 @@
     "jquery": true,
     "mocha": true
   },
+
+  "globals": {
+    "fetch": true,
+    "FormData": true,
+    "localStorage": true,
+    "toastr": true,
+    "FileReader": true,
+    "Image": true,
+    "location": true,
+    "window": true,
+    "document": true,
+    "jest": true
+  },
+
   "rules": {
     "one-var": 0,
     "one-var-declaration-per-line": 0,
