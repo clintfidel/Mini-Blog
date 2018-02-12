@@ -1,4 +1,4 @@
-import { SIGNUP_ERROR, SIGNUP_USER, SIGNIN_USER } from '../actions/types';
+import { SIGNUP_USER, SIGNIN_USER } from '../actions/types';
 
 const initialState = {
   user: {},
@@ -22,9 +22,6 @@ function AuthReducer(state = initialState, action) {
 
     case SIGNIN_USER:
       return { ...state, user: action.user, authenticated: true };
-
-    case SIGNUP_ERROR:
-      return { ...state, user: action.message, authenticated: false };
 
     default:
       return state;
