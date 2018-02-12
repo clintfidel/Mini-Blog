@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import toastrOption from '../../../utils/toastrOption'
 
 class LoginForm extends Component {
   constructor (props) {
@@ -26,7 +27,15 @@ class LoginForm extends Component {
 		this.setState({
 			isLoading: true
 		})
-		this.props.loginAction(this.state)
+    this.props.loginAction(this.state)
+    .then((message) => {
+      toastrOption();
+      toastr.success('You have successfully logged in');
+    })
+    .catch(message => {
+      toastrOption();
+      toastr.error(message);
+    });
 	}
 
   render () {

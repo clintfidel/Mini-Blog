@@ -184,7 +184,7 @@ export const isSignedUpWithUsername = (req, res, next) => {
     .then((user) => {
       if (user) {
         return res.status(409).json({
-          error: 'username already exist'
+          message: 'username already exist'
         });
       }
       next();
@@ -212,7 +212,7 @@ export const isSignedUpWithEmail = (req, res, next) => {
     .then((user) => {
       if (user) {
         return res.status(409).json({
-          error: 'email already exist '
+          message: 'email already exist '
         });
       }
       next();

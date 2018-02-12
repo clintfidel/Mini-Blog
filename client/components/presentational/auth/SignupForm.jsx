@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import toastrOption from '../../../utils/toastrOption';
+import { checkUserInput } from '../../../utils/validation'
 
 class SignupForm extends Component {
   constructor (props) {
@@ -14,7 +16,8 @@ class SignupForm extends Component {
       usernameError: '',
       emailError: '',
       passwordError: '',
-      confirmPasswordError: ''
+      confirmPasswordError: '',
+      redirectUser: false
     }
     this.onChange = this.onChange.bind(this)
     this.onFocus = this.onFocus.bind(this)
@@ -34,7 +37,7 @@ class SignupForm extends Component {
     const name = event.target.name
     switch (name) {
       case 'username':
-        this.setState({username: ''})
+        this.setState({usernameError: ''})
         break
       case 'email':
         this.setState({emailError: ''})
@@ -50,37 +53,65 @@ class SignupForm extends Component {
   onBlur (event) {
     const name = event.target.name,
      value = event.target.value,
-      password = document.getElementById('password').value
+      pwordVal = document.getElementById('pword').value
     switch (name) {
       case 'username':
-        if (value.length < 5 || value === ' ') {
+        if (value.length < 5 || !value) {
           this.setState({usernameError: 'Username should be more than 5 characters'})
+          return false;
         }
+        return true
         break
       case 'email':
       if(!(value.endsWith('.com') && /@/.test(value))) {
         this.setState({ emailError: 'Invalid email'})
+        return false;
       }
+      return true;
         break
       case 'password':
-        if (value.length < 5 || value === ' ') {
+        if (value.length < 5 || !value) {
           this.setState({passwordError: 'Your password is required'})
+          return false;
         }
+        return true
         break
       case 'confirmPassword':
-        if (value !== password) {
+        if (value !== this.state.password) {
           this.setState({confirmPasswordError: 'password do not match!'})
+          return false;
         }
+        return true;
         break
     }
   }
 
   onSubmit(event) {
     event.preventDefault();
+    // const username = this.state.username
+    // const fullname = this.state.fullname;
+    // const password = this.state.password
+     const { username, email, password } = this.state;
+    console.log(typeof username)
+    if(checkUserInput(username, fullname, password)) {
+      toastrOption();
+       return toastr.error('Invalid Input');
+    }
     this.setState({
       isLoading: true
     });
     this.props.registerAction(this.state)
+    .then((message) => {
+      toastrOption();
+      toastr.success('You have successfully signed up');
+      // setTimeout(() => {
+      //   this.setState({ redirectUser: true });
+      // }, 3000);
+    })
+    .catch(message => {
+      toastrOption();
+      toastr.error(message);
+    });
   }
 
   render () {
@@ -136,7 +167,7 @@ class SignupForm extends Component {
               onChange={this.onChange}
               type='password'
               name='password'
-              id='password'
+              id='pword'
               tabIndex='-3'
               className='form-control'
               onFocus={this.onFocus}
