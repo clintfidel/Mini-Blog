@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Sacramento');
+body{
+    font-family:'Roboto','sans-serif';
+    --margin: 5px;
+    --pad: 3px;
+    width: 100%;
+    margin: -15px 0 0;
+    padding: 0px;
+}
+.my_navbar{
+background-image: -webkit-linear-gradient(left,rgba(225, 225, 225, 1), rgb(51, 36, 192));
+border-bottom:1px solid rgb(51, 36, 192);
+width:100%;
+height: auto;
+padding: 9px;
+position: fixed;
+margin: auto 0px;
+top: 0;
+z-index: 1;
+  }
+  
+.my_navbar  .navbar-nav >  li >  a
+{
+font-size: 16px;
+color: white;
+padding: 15px 20px;
+transition: .5s
+}
+.my_navbar  .navbar-nav >  li > a.active
+{
+font-size: 16px;
+color: white;
+background-color:#2e3d41;
+}
+
+.navbar-nav {
+    flex-direction: row;
+  }
+
+.my_navbar  .navbar-nav >  li >  a:hover
+{
+font-size: 16px;
+color: white;
+padding: 15px 20px;
+transform: scale(1.2);
+}
+.my_navbar  .navbar-nav >  li >  a:hover,
+.my_navbar  .navbar-nav >  li >  a:focus {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+/* .my_navbar .navbar-nav>li>.dropdown-menu {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+	background-color:#2e3d41;
+} */
+/* .dropdown-menu>li>a {
+    display: block;
+    padding: 10px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #fff;
+    white-space: nowrap;
+} */
+
+.navbar-header > a
+{
+font-family:  'Sacramento', cursive;
+margin: 0px;
+text-decoration: none;
+color:rgb(51, 36, 192);
+font-size: 35px;
+font-weight:bolder;
+padding: 15px 30px;
+}
+.my_navbar .navbar-toggle {
+    position: relative;
+    float: right;
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    background-color: #080b35;
+    background-image: none;
+    border-radius: 4px;
+}
+.my_navbar .navbar-toggle .icon-bar {
+color: white;
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+}
+
+.modal-backdrop {
+    position: relative !important;
+    top: -25%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 125%;
+    width: 100%;
+    background-color: #000;
+  }
+
+
+  .fade.in {
+   z-index: 1006
+}
+.md-form{
+margin-top: calc(var(--margin)*3)
+}
+
+  .modal-content {
+    margin: 200px auto;
+  }
+
+  #login-button, #register-button {
+    background-color: rgb(51, 36, 192) !important;
+    color: white !important;
+  }
+
+  .darken-grey-text {
+    color: #2E2E2E;
+}
+
+.all-page {
+    padding: 100px 0 0;
+    background-image: url(http://www.emoticonswallpapers.com/background/skulls/skulls-background-pattern-0790.jpg) !important;
+}
+
+.all-articles{
+    background-color: rgb(5, 2, 29);
+    margin: auto calc(var(--margin) * 20);
+    border-radius: 4px 
+}
+
+.card{
+    margin: calc(var(--margin) * 7) auto ;
+}
+
+.card-body{
+    padding: var(--pad) calc(var(--pad)* 3);
+    text-overflow: ellipsis;
+    word-wrap: break-word
+}
+
+.img-fluid {
+transition: .5s
+}
+
+.img-fluid:hover{
+    transform: scale(1.1)
+    }
+
+.btn {
+    background-color:  rgb(5, 2, 29) !important;
+    color: white
+}
+
+
+.copyright{
+    background-image: -webkit-linear-gradient(left,rgba(225, 225, 225, 1), rgb(51, 36, 192));
+    margin-top: var(--margin);
+    text-align: center !important;
+    
+}
+
+.copyright p{
+	font-size:17px;
+    padding:calc(var(--pad)* 8) 0;
+    
+}
+
+@media only screen and (max-width: 500px) {
+   
+    .all-articles{
+        background-color: rgb(5, 2, 29);
+        margin: auto calc(var(--margin) * 5);
+        border-radius: 4px 
+    }
+
+   .my_navbar .navbar-toggle {
+   
+    margin-top: 5px;
+    margin-right: 15px;
+    margin-bottom: -45px;
+    background-color: #1c0e4ec2;
+   
+}
