@@ -41,13 +41,27 @@
                 <a href="favourite.html">My Profile</a>
               </li>
               <li class="">
-                <a href="#">About</a>
+                <a href="#" data-toggle="modal" data-target="#addblog-modal">Add blog </a>
               </li>
             </ul>
           </div>
         </div>
       </nav>
     </div>
+  </div>
+  <div class="modal fade" id="addblog-modal" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      
+          <div class="addblogmodal-container">
+                  <a href="#" data-dismiss="modal" style="float: right;">X</a>
+              <h1>Add Article</h1><br>
+            <form>
+              <input type="text" class="form-control" name="article" placeholder="Article-Title">
+              <textarea name="blog-post" placeholder="Blog Post" class="form-control" id="blog-post" cols="30" rows="10"></textarea>
+              <input type="submit" name="Add" class="addblog addblogmodal-submit" value="Add Blog">
+            </form>
+          </div>
+      </div>
   </div>
   <div class='page-container'>
     <div class="article-page">
