@@ -142,6 +142,7 @@ margin-top: calc(var(--margin)*3)
 }
 
 .card{
+    overflow: hidden;
     margin: calc(var(--margin) * 7) auto ;
 }
 
@@ -156,8 +157,9 @@ transition: .5s
 }
 
 .img-fluid:hover{
-    transform: scale(1.1)
-    }
+transform: scale(1.1);
+
+ }
 
 .btn {
     background-color:  rgb(5, 2, 29) !important;
