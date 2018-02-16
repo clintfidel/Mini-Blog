@@ -1,11 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import HomePage from '../components/container/Homepage'
+import SignupAndSignin from '../components/presentational/includes/NavBar';
+// import AllBlog from '../components/container/ArticlesPage';
+
 
 const Routes = () => (
   <Router>
     <Switch>
-      <Route path='/' component={HomePage} />
+      <Route path='/createUser' component={SignupAndSignin} />
+      
     </Switch>
   </Router>
 )
