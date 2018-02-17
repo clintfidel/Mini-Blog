@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 $('.modal').on('shown.bs.modal', () => {
   $('.all-articles, .container-comment').css({ opacity: 0.1 });
 });
