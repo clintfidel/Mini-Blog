@@ -31,7 +31,7 @@ class LoginForm extends Component {
     this.props.loginAction(this.state)
       .then((message) => {
         toastrOption()
-        toastr.success(message)
+        toastr.success('Welcome back!')
       })
       .catch(message => {
         toastrOption()

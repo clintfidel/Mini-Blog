@@ -104,7 +104,7 @@ class SignupForm extends Component {
     this.props.registerAction(this.state)
       .then((message) => {
         toastrOption()
-        toastr.success('You have successfully signed up')
+        toastr.success('You have signed up successfully')
       // setTimeout(() => {
       //   this.setState({ redirectUser: true })
       // }, 3000)
