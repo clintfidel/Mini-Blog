@@ -10,7 +10,7 @@ import { checkArticleInput,
 
 const {
   create, deleteArticle, editArticle, reviewArticles,
-  getAllArticlesByPage, rateArticles, viewArticles, getOneArticle
+  getAllArticles, rateArticles, viewArticles, getOneArticle
 } = Blog;
 
 const blogRouter = express.Router();
@@ -20,7 +20,7 @@ blogRouter.route('/')
     isLoggedIn, checkArticleInput,
     blogTitleExist, verifyUserIdExist, create
   )
-  .get(isLoggedIn, getAllArticlesByPage);
+  .get(isLoggedIn, getAllArticles);
 
 blogRouter.route('/delete/:blogId')
   .delete(
