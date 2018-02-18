@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import toastrOption from '../../../utils/toastrOption'
-import { loginAction } from '../../../actions/AuthAction'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import toastrOption from '../../../utils/toastrOption';
+import { loginAction } from '../../../actions/AuthAction';
 
 class LoginForm extends Component {
   constructor (props) {
