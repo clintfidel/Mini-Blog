@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { registerAction } from '../../../actions/AuthAction'
-import toastrOption from '../../../utils/toastrOption'
-import checkUserInput from '../../../utils/validation'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { registerAction } from '../../../actions/AuthAction';
+import toastrOption from '../../../utils/toastrOption';
+import checkUserInput from '../../../utils/validation';
 
 class SignupForm extends Component {
   constructor (props) {
