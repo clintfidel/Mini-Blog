@@ -64,7 +64,6 @@ class LoginForm extends Component {
               <div className='modal-body mx-3'>
                 <form
                   onSubmit={this.onSubmit}
-                  id='login-form'
                   action='#'
                   method='post'
                   role='form'
@@ -99,7 +98,6 @@ class LoginForm extends Component {
                       onChange={this.onChange}
                       name='password'
                       type='password'
-                      id='defaultForm-pass'
                       className='form-control validate'
                       required/>
                   </div>
