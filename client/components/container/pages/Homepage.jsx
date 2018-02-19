@@ -36,24 +36,23 @@ class HomePage extends Component {
     this.setState({
       loader: true
     });
-    this.props.getAllArticles()
-      .then(() => {
-        this.setState({
-          loader: false
-        });
-      });
+    
+    this.props.getAllArticles();
+      // .then(() => {
+      //   this.setState({
+      //     loader: false
+      //   });
+      // });
   }
 
   renderAllArticles() {
     let allArticles = this.props.articles;
-    console.log(allArticles)
     if (allArticles.length < 1){
       return <div className= 'notifier'><h1>No article found </h1></div>
     }
 
     else {
       return allArticles.map((article) =>{
-        console.log(article)
         return (
           <Articles 
           title ={article.blogTitle}
@@ -72,7 +71,7 @@ class HomePage extends Component {
       <div>
       <div className='all-page'>
       <NavBar />
-      <div className= 'row'>
+      <div className='row'>
       {this.renderAllArticles()}
       </div>
       <Footer />
@@ -85,7 +84,6 @@ class HomePage extends Component {
 
 // }
 const mapStateToProps = (state) => {
-  console.log(state, '====>');
   return {
     articles: state.ArticleReducer.articles
   };
