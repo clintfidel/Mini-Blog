@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerAction } from '../../../actions/AuthAction';
 import toastrOption from '../../../utils/toastrOption';
