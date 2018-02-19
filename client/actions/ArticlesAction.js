@@ -12,9 +12,7 @@ export function getAllArticles() {
           allArticles: response.data
         });
       })
-      .catch((error) => {
-        console.log(error);
-      });
+			.catch(error => Promise.reject(error.response.data.message));
   };
 }
 

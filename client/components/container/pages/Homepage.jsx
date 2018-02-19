@@ -17,27 +17,11 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    $('.modal').on('shown.bs.modal', () => {
-      $('.all-articles, .container-comment').css({ opacity: 0.1 });
-    });
-    
-    // when modal closes
-    $('.modal').on('hidden.bs.modal', () => {
-      $('.all-articles, .container-comment').css({ opacity: 1 });
-    });
-    
-    $(document).ready(() => {
-      $('.material-button-toggle').on('click', function () {
-        $(this).toggleClass('open');
-        $('.option').toggleClass('scale-on');
-      });
-    });
-
     this.setState({
       loader: true
     });
     
-    this.props.getAllArticles();
+    this.props.getAllArticles()
       // .then(() => {
       //   this.setState({
       //     loader: false
@@ -48,12 +32,15 @@ class HomePage extends Component {
   renderAllArticles() {
     let allArticles = this.props.articles;
     if (allArticles.length < 1){
-      return <div className= 'notifier'><h1>No article found </h1></div>
-    }
-
-    else {
-      return allArticles.map((article) =>{
-        return (
+      return <div className= 'not-found'><h1>No article found </h1></div>
+		}
+		
+		return (
+			<main className='all-articles'>
+      <div className='container mt-4'>
+		<div className="row">
+    {
+      allArticles.map((article) => (
           <Articles 
           title ={article.blogTitle}
           post = {article.blogPost}
@@ -62,8 +49,11 @@ class HomePage extends Component {
           key={article.id}
           />
         )
-      })
-    }
+      )
+		}
+		</div>
+		</div>
+			</main>)
   }
 
   render() {
@@ -71,9 +61,9 @@ class HomePage extends Component {
       <div>
       <div className='all-page'>
       <NavBar />
-      <div className='row'>
-      {this.renderAllArticles()}
-      </div>
+			<div>
+			{this.renderAllArticles()}
+			</div>
       <Footer />
     </div>
       </div>
