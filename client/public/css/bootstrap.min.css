@@ -4102,7 +4102,7 @@ html {
               box-shadow: none;
     }
     .navbar-collapse.collapse {
-      display: block !important;
+      display: flex !important;
       height: auto !important;
       padding-bottom: 0;
       overflow: visible !important;

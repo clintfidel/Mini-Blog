@@ -106,9 +106,24 @@ color: white;
 	background-color: #000;
 }
 
+.row {
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	margin-right: 0;
+	margin-left: 0;
+}
+.not-found {
+	text-align: center;
+	color: #fff;
+  padding-top: 20%;
+	padding-bottom: 25%;
+}
+
 
   .fade.in {
-   z-index: 1006
+   z-index: 0
 }
 .md-form{
 margin-top: calc(var(--margin)*3)
@@ -244,7 +259,32 @@ transform: scale(1.1);
   .comment-list figcaption {
    
     word-wrap: break-word;
+	}
+	
+	@media (min-width: 768px) {
+    .navbar-collapse {
+      width: auto;
+      border-top: 0;
+      -webkit-box-shadow: none;
+              box-shadow: none;
+    }
+    .navbar-collapse.collapse {
+      display: flex !important;
+      height: auto !important;
+      padding-bottom: 0;
+      overflow: visible !important;
+    }
+    .navbar-collapse.in {
+      overflow-y: visible;
+    }
+    .navbar-fixed-top .navbar-collapse,
+    .navbar-static-top .navbar-collapse,
+    .navbar-fixed-bottom .navbar-collapse {
+      padding-right: 0;
+      padding-left: 0;
+    }
   }
+	
 
   @media (min-width: 768px) {
     .comment-list .arrow:after, .comment-list .arrow:before {

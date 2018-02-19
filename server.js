@@ -12,7 +12,7 @@ import UserRoutes from './server/routes/userRouter';
 
 const app = express();
 
-dotenv.load();
+dotenv.config();
 
 app.use(webpackMiddleware(webpack(webpackConfig)));
 app.use(bodyParser.json());

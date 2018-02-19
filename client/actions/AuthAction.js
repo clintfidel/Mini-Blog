@@ -48,7 +48,6 @@ export const registerAction = userDetails => dispatch => axios
 export const loginAction = userDetails => dispatch => axios
   .post('/api/v1/users/signin', userDetails)
   .then((response) => {
-		console.log(response)
     const { token } = response.data;
     setAuthorization(token);
     localStorage.setItem('token', token);

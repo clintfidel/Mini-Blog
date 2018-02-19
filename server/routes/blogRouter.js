@@ -20,7 +20,7 @@ blogRouter.route('/')
     isLoggedIn, checkArticleInput,
     blogTitleExist, verifyUserIdExist, create
   )
-  .get(isLoggedIn, getAllArticles);
+  .get(getAllArticles);
 
 blogRouter.route('/delete/:blogId')
   .delete(
