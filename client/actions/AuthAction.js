@@ -47,8 +47,9 @@ export const registerAction = userDetails => dispatch => axios
 
 export const loginAction = userDetails => dispatch => axios
   .post('/api/v1/users/signin', userDetails)
-  .then((responses) => {
-    const { token } = responses.data;
+  .then((response) => {
+		console.log(response)
+    const { token } = response.data;
     setAuthorization(token);
     localStorage.setItem('token', token);
     const currentUser = jwtDecode(token);

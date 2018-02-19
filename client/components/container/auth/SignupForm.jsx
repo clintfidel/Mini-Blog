@@ -140,7 +140,6 @@ class SignupForm extends Component {
               <div className='modal-body mx-3'>
                 <form
                   onSubmit={this.onSubmit}
-                  id='login-form'
                   action='#'
                   method='post'
                   role='form'
@@ -199,7 +198,6 @@ class SignupForm extends Component {
                       onBlur={this.onBlur}
                       onFocus={this.onFocus}
                       type='email'
-                      id='defaultForm-email'
                       className='form-control validate'
                       name='email'
                       required/>
@@ -243,7 +241,6 @@ class SignupForm extends Component {
                       onBlur={this.onBlur}
                       onFocus={this.onFocus}
                       type='password'
-                      id='defaultForm-pass'
                       className='form-control validate'
                       name='confirmPassword'
                       required/>
