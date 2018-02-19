@@ -2,14 +2,20 @@ import axios from 'axios';
 import { GET_ALL_ARTICLES } from './types';
 
 const apiUrl = 'api/v1/articles/';
-const getAllArticles = dispatch => axios
-  .get(apiUrl)
-  .then((response) => {
-    dispatch({
-      type: GET_ALL_ARTICLES,
-      allArticles: response.data
-    });
-  })
-  .catch(error => error.response);
+export function getAllArticles() {
+  return (dispatch) => {
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        dispatch({
+          type: GET_ALL_ARTICLES,
+          allArticles: response.data
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+}
 
 export default getAllArticles;
