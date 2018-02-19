@@ -5,7 +5,7 @@ import omit from 'lodash/omit';
 import database from '../models';
 
 dotenv.load();
-const secret = process.env.secretkey;
+const secret = process.env.secretKey;
 
 const { User } = database;
 const UserController = {
@@ -31,7 +31,7 @@ const UserController = {
           const expiresIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
           const token = jwt.sign(
             { currentUser, expiresIn },
-            process.env.secretKey
+            secret
           );
 
           return res.status(201).send({
@@ -44,7 +44,6 @@ const UserController = {
         res.status(500).send({
           status: false,
           message: 'Internal server Error'
-
         });
       });
   },
@@ -81,7 +80,7 @@ const UserController = {
           const expireIn = { exp: Math.floor(Date.now() / 1000) + (60 * 60) };
           const token = jwt.sign(
             { expireIn, currentUser },
-            process.env.secretKey
+            secret
           );
           return res.status(200)
             .json({

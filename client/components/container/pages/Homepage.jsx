@@ -18,7 +18,7 @@ class HomePage extends Component {
 
   componentDidMount () {
     $('.modal').on('shown.bs.modal', () => {
-      $('.all-articles, .container-comment').css({ opacity: 0.1 })
+      $('.all-articles, .container-comment').css({ opacity: 0.9 })
     })
 
     // when modal closes
@@ -48,33 +48,39 @@ class HomePage extends Component {
   renderAllArticles () {
     let allArticles = this.props.articles
     if (allArticles.length < 1) {
-      return <div className='notifier'>
+      return <div className='not-found'>
                <h1>No article found</h1>
              </div>
-    }else {
-      return allArticles.map((article) => {
-        return ( <main className='all-articles'>
-                   <div className='container mt-4'>
-                     <div className='row'>
-                       <Articles
-                         title={article.blogTitle}
-                         post={article.blogPost}
-                         views={article.views}
-                         id={article.id}
-                         key={article.id} />
-                     </div>
-                   </div>
-                 </main>)
-      })
     }
+
+    return (
+      <main className='all-articles'>
+        <div className='container mt-4'>
+          <div className='row'>
+            {allArticles.map((article) => (
+               <Articles
+                 title={article.blogTitle}
+                 post={article.blogPost}
+                 views={article.views}
+                 id={article.id}
+                 key={article.id} />
+             )
+             )}
+          </div>
+        </div>
+      </main>)
   }
+
+
 
   render () {
     return (
       <div>
         <div className='all-page'>
           <NavBar />
-          {this.renderAllArticles()}
+          <div>
+            {this.renderAllArticles()}
+          </div>
           <Footer />
         </div>
       </div>
