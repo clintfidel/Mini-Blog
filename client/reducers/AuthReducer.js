@@ -1,9 +1,9 @@
-import { SIGNUP_USER, SIGNIN_USER } from '../actions/types';
+import { SIGNUP_USER, SIGNIN_USER, UNAUTH_USER } from '../actions/types';
 
 const initialState = {
   user: {},
   authenticated: false,
-  error: ''
+  message: ''
 };
 
 /**
@@ -22,6 +22,10 @@ function AuthReducer(state = initialState, action) {
 
     case SIGNIN_USER:
       return { ...state, user: action.user, authenticated: true };
+
+    case UNAUTH_USER:
+    return { ...state, user: action.user, authenticated: false, 
+      message:'you have successfully Logged out' }
 
     default:
       return state;
