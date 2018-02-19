@@ -5,6 +5,7 @@ import '../../../public/css/style.css'
 import Articles from '../../presentational/pages/Articles'
 import NavBar from '../../presentational/includes/NavBar'
 import Footer from '../../presentational/includes/Footer'
+import { logoutAction } from '../../../actions/AuthAction'
 import getAllArticles from '../../../actions/ArticlesAction'
 
 class HomePage extends Component {
@@ -77,7 +78,9 @@ class HomePage extends Component {
     return (
       <div>
         <div className='all-page'>
-          <NavBar />
+          <NavBar
+          logout={this.props.logoutAction}
+          authenticated = {this.props.isAuthenticated} />
           <div>
             {this.renderAllArticles()}
           </div>
@@ -91,9 +94,11 @@ class HomePage extends Component {
 
 // }
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
-    articles: state.ArticleReducer.articles
+    articles: state.ArticleReducer.articles,
+    isAuthenticated: state.AuthReducer.authenticated
   }
 }
 
-export default connect(mapStateToProps, {getAllArticles})(HomePage)
+export default connect(mapStateToProps, {getAllArticles, logoutAction})(HomePage)
