@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 // import PropTypes from 'prop-types'
-import Login from '../../container/auth/LoginForm'
-import SignUp from '../../container/auth/SignupForm'
+import Login from '../../container/auth/LoginForm';
+import SignUp from '../../container/auth/SignupForm';
+import NewArticle from '../../container/pages/AddArticle';
 
 class NavBar extends Component {
   render () {
+    const { authenticated, logout } = this.props
     return (
       <div>
         <nav className='navbar navbar-expand-lg my_navbar navbar-header'>
@@ -24,14 +26,26 @@ class NavBar extends Component {
           </button>
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav ml-auto'>
-              <li>
-                <a data-toggle='modal' data-target='#modalLoginForm'>Login</a>
-                <Login />
-              </li>
-              <li>
-                <a data-toggle='modal' data-target='#modalSignUpForm'>Register</a>
-                <SignUp />
-              </li>
+              {!authenticated &&
+               (<li>
+                  <a data-toggle='modal' data-target='#modalLoginForm'>Login</a>
+                  <Login />
+                </li>)}
+              {!authenticated &&
+               (<li>
+                  <a data-toggle='modal' data-target='#modalSignUpForm'>Register</a>
+                  <SignUp />
+                </li>)}
+              {authenticated &&
+               (<li>
+                  <a data-toggle='modal' data-target='#modalAddArticle'>Add Article</a>
+                  <NewArticle />
+                </li>)}
+
+                {authenticated &&
+                  (<li>
+                    <a onClick ={logout}>Logout</a>
+                   </li>)}
             </ul>
           </div>
         </nav>
